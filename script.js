@@ -1,102 +1,3 @@
-// ==================== SECURITY: BLOCK INSPECT ELEMENT ====================
-// Disable right-click
-document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    return false;
-});
-
-// Disable specific keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    // F12 (Developer Tools)
-    if (e.keyCode === 123) {
-        e.preventDefault();
-        return false;
-    }
-    
-    // Ctrl+Shift+I (Inspect Element)
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-        e.preventDefault();
-        return false;
-    }
-    
-    // Ctrl+Shift+J (Console)
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
-        e.preventDefault();
-        return false;
-    }
-    
-    // Ctrl+Shift+C (Inspect Element)
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
-        e.preventDefault();
-        return false;
-    }
-    
-    // Ctrl+U (View Source)
-    if (e.ctrlKey && e.keyCode === 85) {
-        e.preventDefault();
-        return false;
-    }
-    
-    // Ctrl+S (Save Page)
-    if (e.ctrlKey && e.keyCode === 83) {
-        e.preventDefault();
-        return false;
-    }
-    
-    // Ctrl+Shift+K (Console on Firefox)
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 75) {
-        e.preventDefault();
-        return false;
-    }
-});
-
-// Disable text selection
-document.addEventListener('selectstart', (e) => {
-    e.preventDefault();
-    return false;
-});
-
-// Disable copy
-document.addEventListener('copy', (e) => {
-    e.preventDefault();
-    return false;
-});
-
-// Disable cut
-document.addEventListener('cut', (e) => {
-    e.preventDefault();
-    return false;
-});
-
-// Detect if DevTools is open
-(function() {
-    const element = new Image();
-    Object.defineProperty(element, 'id', {
-        get: function() {
-            // DevTools detected
-            window.location.href = 'about:blank';
-        }
-    });
-    
-    setInterval(() => {
-        console.log(element);
-        console.clear();
-    }, 1000);
-})();
-
-// Additional protection against console access
-const disableConsole = () => {
-    const noOp = () => {};
-    const methods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'trace', 'dir', 'dirxml', 'group', 'groupCollapsed', 'groupEnd', 'clear'];
-    
-    methods.forEach(method => {
-        console[method] = noOp;
-    });
-};
-
-// Call the disableConsole function
-disableConsole();
-
 // ==================== SMOOTH 3D SPHERE CONTROLS ====================
 document.addEventListener('DOMContentLoaded', () => {
     const sphere = document.getElementById('techSphere');
@@ -292,10 +193,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 // ==================== CODE PROTECTION MEASURES ====================
 
-// Right-click is now enabled
-// All keyboard shortcuts enabled
-// Text selection enabled
-// Copy/paste enabled
+// Disable right-click context menu site-wide
+(function() {
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Optional: disable text selection or copy if desired
+    // document.addEventListener('selectstart', e => e.preventDefault());
+    // document.addEventListener('copy', e => e.preventDefault());
+})();
 
 // ==================== SMOOTH SCROLLING & NAVIGATION ==================== 
 document.addEventListener('DOMContentLoaded', () => {
@@ -496,6 +403,7 @@ function animateParticles() {
 
 // ==================== PARALLAX EFFECT (Optional Enhancement) ==================== 
 window.addEventListener('scroll', () => {
+    if (window.innerWidth <= 768) return; // Disable on mobile to prevent jitter
     const scrolled = window.pageYOffset;
     const parallaxElements = document.querySelectorAll('.hero::before');
     
@@ -563,3 +471,22 @@ document.head.appendChild(style);
 // ==================== CONSOLE MESSAGE ==================== 
 console.log('%c🎨 Welcome to SS Creative Portfolio! 🎨', 'color: #00D4FF; font-size: 20px; font-weight: bold;');
 console.log('%cCreated with ❤️ by ScriptSpace Creative Team', 'color: #FF006E; font-size: 14px;');
+
+// ==================== DISABLE MOBILE ZOOM ====================
+document.addEventListener('DOMContentLoaded', () => {
+    // Enforce viewport settings to prevent zooming
+    let viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (!viewportMeta) {
+        viewportMeta = document.createElement('meta');
+        viewportMeta.name = 'viewport';
+        document.head.appendChild(viewportMeta);
+    }
+    viewportMeta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+
+    // Prevent pinch zoom gestures
+    document.addEventListener('touchmove', function(event) {
+        if (event.touches.length > 1) {
+            event.preventDefault();
+        }
+    }, { passive: false });
+});
