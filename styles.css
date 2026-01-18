@@ -1,31 +1,48 @@
 /* ==================== GLOBAL STYLES ==================== */
-
-/* CRITICAL: Mobile navbar visibility fix - Must be first! */
-@media (max-width: 768px) {
-    .navbar {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        z-index: 999999 !important;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-}
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     outline: none !important;
     -webkit-tap-highlight-color: transparent !important;
-    cursor: default !important;
-    user-select: none !important;
-    -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
+    /* Standard cursor for everything */
+    cursor: default; 
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Scrollbar Styling (Optional but helps avoid layout shifts) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+/* THE CRITICAL SCROLL FIX */
+html {
+    width: 100%;
+    /* This stops the side scroll on the root element */
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    width: 100%;
+    /* This ensures content fits inside the window */
+    max-width: 100%;
+    background-color: var(--dark-bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-light);
+    line-height: 1.6;
+    
+    /* FIX: Do NOT set height: 100vh here, or you get double scrollbars */
+    min-height: 100vh; 
+    position: relative;
 }
 
 /* Override text cursor for all text elements */
@@ -66,58 +83,13 @@ input, textarea {
     --warning: #ffffff;
 }
 
-html {
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: geometricPrecision;
-    -webkit-text-size-adjust: 100%;
-    /* Prevent horizontal scroll at html level (doesn't break sticky) */
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--dark-bg);
-    color: var(--text-light);
-    line-height: 1.6;
-    /* overflow-x: hidden removed - breaks sticky positioning on mobile */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: geometricPrecision;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    cursor: default !important;
-    margin: 0;
-    padding: 0;
-}
-
-/* Block text cursor for all elements except inputs */
-body * {
-    cursor: default !important;
-}
-
-/* Keep pointer cursor for interactive elements */
-body a, body button, body .cta-button, body .nav-link, body .hamburger, 
-body .service-card, body .team-member, body .scroll-top, body .back-button,
-body .social-link {
-    cursor: pointer !important;
-}
-
-/* Allow text cursor only in input fields */
-body input, body textarea {
-    cursor: text !important;
-}
-
 /* Prevent scrolling when mobile menu is open */
 body.menu-open {
-    overflow: hidden;
+    overflow: hidden !important;
     position: fixed;
     width: 100%;
+    height: 100%;
 }
-
 .custom-cursor {
     position: absolute;
     width: 33px;
@@ -199,14 +171,6 @@ body.menu-open {
 }
 
 
-
-
-
-
-
-
-
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -218,55 +182,24 @@ body.menu-open {
     position: sticky;
     top: 0;
     width: 100%;
-    background: rgba(0, 0, 0, 0.95); /* Slightly more opaque for better mobile support */
-    /* Backdrop-filter commented for mobile compatibility - uncomment for desktop only if needed */
-    /* backdrop-filter: blur(10px); */
-    /* -webkit-backdrop-filter: blur(10px); */
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
-    z-index: 10001; /* Higher than cursor elements (10000) */
+    z-index: 1000;
     padding: 1rem 0;
     border-radius: 0 0 25px 25px;
-    /* Ensure no transforms on navbar itself */
-    will-change: auto;
 }
 
-/* Desktop: Use position sticky with backdrop-filter (works reliably on desktop) */
-@media (min-width: 769px) {
-    .navbar {
-        position: sticky;
-        z-index: 10001; /* Match mobile z-index */
-        /* Re-enable backdrop-filter for desktop glass effect */
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        background: rgba(0, 0, 0, 0.85);
-    }
-}
-
-/* Mobile: Use position fixed with body padding compensation */
+/* Mobile navbar fix */
 @media (max-width: 768px) {
-    body {
-        /* Add padding to prevent content from hiding under fixed navbar */
-        padding-top: 70px; /* Adjust based on actual navbar height */
-    }
-    
     .navbar {
         position: fixed !important;
         top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100vw !important; /* Force full viewport width */
-        margin: 0 !important;
-        padding: 1rem 0 !important;
-        z-index: 10001 !important; /* Higher than all other elements */
-        /* Solid background for mobile - no backdrop-filter to avoid compatibility issues */
-        background: rgba(0, 0, 0, 0.98) !important;
-        /* Disable backdrop-filter on mobile for better compatibility */
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        /* Ensure visibility */
-        visibility: visible !important;
-        opacity: 1 !important;
-        display: block !important;
+        left: 0;
+        right: 0;
+        margin: 0;
+        z-index: 1000;
     }
 }
 
@@ -279,10 +212,10 @@ body.menu-open {
 .logo-container {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: -40px;
     cursor: pointer;
+    margin-left: -65;
     transition: transform 0.3s ease;
-    margin-left: -65px;
     text-decoration: none;
 }
 
@@ -291,6 +224,7 @@ body.menu-open {
 }
 
 .logo {
+    position: absolute;
     width: 45px;
     height: 45px;
     filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
@@ -375,15 +309,6 @@ body.menu-open {
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(255, 0, 110, 0.05));
     position: relative;
     overflow: hidden;
-}
-
-/* Mobile hero padding adjustment */
-@media (max-width: 768px) {
-    .hero {
-        /* Reduce top padding on mobile since body has padding-top for fixed navbar */
-        padding: 60px 20px 60px;
-        min-height: calc(100vh - 70px); /* Account for fixed navbar height */
-    }
 }
 
 .hero::before {
@@ -901,7 +826,7 @@ body.menu-open {
     border: 1px solid var(--border-color);
     border-radius: 10px;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: transform 0.1s ease, border-color 0.3s ease, box-shadow 0.1s ease !important;
 }
 
 .stat:hover {
@@ -929,7 +854,7 @@ body.menu-open {
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
 }
 
@@ -939,7 +864,7 @@ body.menu-open {
     border: 1px solid var(--border-color);
     border-radius: 15px;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease !important;
     position: relative;
     overflow: hidden;
 }
@@ -1176,7 +1101,6 @@ body.menu-open {
 }
 
 /* ==================== CONTACT SECTION ==================== */
-/* ==================== CONTACT SECTION ==================== */
 .contact {
     padding: 80px 20px;
     background: var(--dark-bg);
@@ -1254,7 +1178,7 @@ body.menu-open {
 }
 
 .whatsapp-card .contact-card-icon {
-    color: var(--text-light);
+    color: var(--primary-color);
 }
 
 .whatsapp-card:hover .contact-card-icon {
@@ -1483,23 +1407,25 @@ body.menu-open {
 
 /* ==================== RESPONSIVE DESIGN ==================== */
 @media (max-width: 768px) {
-    /* Body padding is now set in navbar mobile styles above */
+    body {
+        padding-top: 0;
+    }
+
+    section, footer {
+        overflow-x: hidden;
+    }
 
     .nav-menu {
         position: fixed;
         left: -100%;
-        top: 70px; /* Matches navbar height - keep in sync */
+        top: 70px;
         flex-direction: column;
         background-color: var(--light-bg);
         width: 100%;
-        height: calc(100vh - 70px); /* Full viewport minus navbar */
         text-align: center;
-        transition: left 0.3s ease;
+        transition: 0.3s;
         box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
         gap: 0;
-        overflow-y: auto; /* Allow scrolling if menu items exceed viewport */
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        z-index: 10000; /* Below navbar (10001) but above content */
     }
 
     .nav-menu.active {
@@ -1531,6 +1457,48 @@ body.menu-open {
     .hero .container {
         grid-template-columns: 1fr;
         gap: 2rem;
+        overflow: hidden;
+    }
+
+    .tech-sphere-container {
+        width: 300px;
+        height: 300px;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+        margin: 0 auto;
+    }
+
+    .sphere-core {
+        width: 140px;
+        height: 140px;
+    }
+
+    .core-logo {
+        width: 90px;
+        height: 90px;
+    }
+
+    .ring-1 {
+        width: 200px;
+        height: 200px;
+    }
+
+    .ring-2 {
+        width: 250px;
+        height: 250px;
+    }
+
+    .ring-3 {
+        width: 300px;
+        height: 300px;
+    }
+
+    .particle {
+        font-size: 1.2rem;
+    }
+
+    .logo-container {
+        margin-left: 0;
     }
 
     .hero-title {
@@ -1563,11 +1531,10 @@ body.menu-open {
         gap: 2rem;
     }
 
-    .services-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .team-grid {
+    /* FIX: Ensure grids don't overflow on small tablets/phones */
+    .services-grid, 
+    .team-grid, 
+    .contact-cards {
         grid-template-columns: 1fr;
     }
 
@@ -1582,6 +1549,10 @@ body.menu-open {
     .contact {
         padding: 40px 20px;
     }
+
+    .navbar {
+        width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1591,6 +1562,11 @@ body.menu-open {
 
     .nav-menu {
         gap: 0;
+    }
+
+    .hero {
+        overflow: hidden;
+        width: 100%;
     }
 
     .hero-title {
@@ -1616,6 +1592,11 @@ body.menu-open {
 
     .contact {
         padding: 40px 15px;
+    }
+
+    /* FIX: More breathing room on small devices */
+    .container {
+        padding: 0 15px; 
     }
 
     .contact-description {
@@ -1665,6 +1646,43 @@ body.menu-open {
     .skill-tag {
         padding: 0.3rem 0.6rem;
         font-size: 0.75rem;
+    }
+
+    .tech-sphere-container {
+        width: 250px;
+        height: 250px;
+        perspective: 800px;
+        transform-style: preserve-3d;
+        margin: 0 auto;
+    }
+
+    .sphere-core {
+        width: 120px;
+        height: 120px;
+    }
+
+    .core-logo {
+        width: 75px;
+        height: 75px;
+    }
+
+    .ring-1 {
+        width: 170px;
+        height: 170px;
+    }
+
+    .ring-2 {
+        width: 210px;
+        height: 210px;
+    }
+
+    .ring-3 {
+        width: 250px;
+        height: 250px;
+    }
+
+    .particle {
+        font-size: 1rem;
     }
 }
 
@@ -1983,13 +2001,6 @@ button, a, span, p {
         opacity: 1;
         transform: rotate(0deg) scale(1);
     }
-}
-
-/* Force GPU acceleration */
-body, html {
-    will-change: auto;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
 }
 
 /* Prevent double tap zoom on mobile */
